@@ -45,7 +45,7 @@ module.exports = {
                 const user = checkAuth(context);
 
                 if (!user) {
-                    throw new Error('Not authenticated');
+                    throw new AuthenticationError('Not authenticated');
                 }
 
                 const newPost = new Post({
@@ -69,7 +69,7 @@ module.exports = {
                 const user = checkAuth(context);
 
                 if (!user) {
-                    throw new Error('Not authenticated');
+                    throw new AuthenticationError('Not authenticated');
                 }
 
                 const post = await Post.findById(postId);
@@ -84,6 +84,42 @@ module.exports = {
                 } else {
                     throw new AuthenticationError('Action not allowed');
                 }
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+
+        // TOGGLE LIKE POST
+        likePost: async (_, { postId }, context) => {
+            try {
+                const user = checkAuth(context);
+
+                if (!user) {
+                    throw new AuthenticationError('Not authenticated');
+                }
+
+                const post = await Post.findById(postId);
+
+                if (!post) {
+                    throw new UserInputError('Can not found post');
+                }
+
+                const isLike = post.likes.find((like) => like.username === user.username);
+
+                // if like already, -> unlike it
+                if (isLike) {
+                    post.likes = post.likes.filter((like) => like.username !== user.username);
+                } else {
+                    // if not like -> like it
+                    post.likes.unshift({
+                        username: user.username,
+                        createdAt: new Date().toISOString(),
+                    });
+                }
+
+                await post.save();
+
+                return post;
             } catch (error) {
                 throw new Error(error);
             }
