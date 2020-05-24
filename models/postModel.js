@@ -8,7 +8,7 @@ const postSchema = mongoose.Schema({
         {
             body: String,
             username: String,
-            createdAd: String,
+            createdAt: String,
         },
     ],
     likes: [
