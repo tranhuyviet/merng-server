@@ -65,7 +65,9 @@ module.exports = {
                     token,
                 };
             } catch (error) {
-                throw new Error('Register Error ', error);
+                return error;
+                // throw new Error(error);
+                //console.error(error);
             }
         },
 
@@ -99,7 +101,8 @@ module.exports = {
                     token,
                 };
             } catch (error) {
-                throw new UserInputError('Login Error ', error);
+                // throw new UserInputError('Login Error ', error);
+                return error;
             }
         },
     },
