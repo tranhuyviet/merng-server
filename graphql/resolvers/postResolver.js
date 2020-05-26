@@ -1,5 +1,5 @@
 const Post = require('../../models/postModel');
-const { AuthenticationError } = require('apollo-server');
+const { AuthenticationError, UserInputError } = require('apollo-server');
 const checkAuth = require('../../utils/checkAuth');
 
 module.exports = {
@@ -16,7 +16,8 @@ module.exports = {
                 return posts;
             } catch (error) {
                 // throw new UserInputError('GET ALL POSTS ERROR ', error);
-                throw new Error('GET ALL POSTS ERROR ', error);
+                // throw new Error('GET ALL POSTS ERROR ', error);
+                return error;
             }
         },
 
@@ -33,7 +34,8 @@ module.exports = {
                 return post;
             } catch (error) {
                 // throw new UserInputError('GET POST ERROR ', error);
-                throw new Error(error);
+                // throw new Error(error);
+                return error;
             }
         },
     },
@@ -46,6 +48,10 @@ module.exports = {
 
                 if (!user) {
                     throw new AuthenticationError('Not authenticated');
+                }
+
+                if (body.trim() === '') {
+                    throw new UserInputError('Post body must not empty');
                 }
 
                 const newPost = new Post({
@@ -63,7 +69,8 @@ module.exports = {
 
                 return post;
             } catch (error) {
-                throw new Error(error);
+                // throw new Error(error);
+                return error;
             }
         },
 
@@ -89,7 +96,8 @@ module.exports = {
                     throw new AuthenticationError('Action not allowed');
                 }
             } catch (error) {
-                throw new Error(error);
+                // throw new Error(error);
+                return error;
             }
         },
 
@@ -125,7 +133,8 @@ module.exports = {
 
                 return post;
             } catch (error) {
-                throw new Error(error);
+                // throw new Error(error);
+                return error;
             }
         },
     },
