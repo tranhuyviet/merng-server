@@ -26,6 +26,6 @@ const server = new ApolloServer({
         console.log(`Server running at ${serverRes.url}`);
     } catch (error) {
         console.error(error);
-        throw new Error('Server failed');
+        // throw new Error('Server failed');
     }
 })();

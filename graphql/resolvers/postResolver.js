@@ -76,6 +76,7 @@ module.exports = {
 
         // DELETE POST
         deletePost: async (_, { postId }, context) => {
+            console.log('DElete post');
             try {
                 const user = checkAuth(context);
 
@@ -89,6 +90,7 @@ module.exports = {
                     throw new Error('Can not found post');
                 }
 
+                console.log('DELETE POST', postId);
                 if (post.username === user.username) {
                     await post.delete();
                     return 'Post deleted successfully';
